@@ -14,11 +14,20 @@ def update_packages():
     cmd = ['apt-get', 'update', '-y']
     output = install_apt(cmd)
 
+def apt_update():
+    print("Executing apt update")
+    cmd = ['apt', 'update']
+    output = install_apt(cmd)
+
+def install_terraform():
+    print("Installing terraform")
+    cmd = ['apt-get', 'install', 'terraform']
+    output = install_apt(cmd)
+
 def install_packages():
     print("Installing gnupg and software-properties-common")
     cmd = ['apt-get', 'install', '-y', 'gnupg', 'software-properties-common']
     output = install_apt(cmd)
-
 def install_apt(command):
     update = str(subprocess.run(command, capture_output=True).stdout, 'ascii')
     print(f"Output is: {update}")
@@ -33,12 +42,16 @@ def configure_gpg_key():
     create_gpg = subprocess.Popen(('gpg', '--dearmor', '-o', gpg_key_file), stdin=download_gpg.stdout)
     print("Validating the gpg key fingerprint")
     cmd = ['gpg', '--no-default-keyring', '--keyring', gpg_key_file, '--fingerprint']
-    validate_gpg = subprocess.run((cmd, capture_output=True).stdout)
-    print(f"Validate fingerprint output is: {validate_gpg}")
-
+    validate_gpg = subprocess.Popen((cmd), stdout=subprocess.PIPE)
+    print(f"\n Validate fingerprint output is: {validate_gpg.stdout}")
+    lsb_release = str(subprocess.run(['lsb_release', '-cs'], capture_output=True).stdout, 'ascii')
+    with open('/etc/apt/sources.list.d/hashicorp.list', "w") as repository:
+        repository.write('deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com '+ lsb_release.strip() +'  main')
 
 if __name__ == "__main__":
     update_packages()
     install_packages()
     remove_gpg_key()
     configure_gpg_key()
+    apt_update()
+    install_terraform()
