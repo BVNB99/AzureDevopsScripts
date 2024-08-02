@@ -29,3 +29,5 @@ if __name__ == "__main__":
     create_agent_directory()
     download_archive_file()
     install_archive_file()
+    print("Execute ./config.sh and ./run.sh in " + tar_file_path + " path")
+    
