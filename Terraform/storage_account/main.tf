@@ -9,8 +9,8 @@ resource "azurerm_resource_group" "create_rg" {
 
 resource "azurerm_storage_account" "create_storage" {
     name        =       "tfbackendstorage1"
-    resource_group_name         =       "test-rg" #azurerm_resource_group.create_rg.name
-    location                    =       "East US" #azurerm_resource_group.create_rg.location
+    resource_group_name         =       azurerm_resource_group.create_rg.name
+    location                    =       azurerm_resource_group.create_rg.location
     account_tier                =       "Standard"
     account_replication_type    =       "LRS"
     tags = {
