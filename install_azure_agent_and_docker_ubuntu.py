@@ -32,12 +32,12 @@ def apt_update():
 
 def install_packages():
     print("Installing apt-transport-https and software-properties-common")
-    cmd = ['apt', 'install', 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']
+    cmd = ['apt', 'install', 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', '-y']
     output = install_apt(cmd)
 
 def install_apt(command):
     update = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print(f"Output is: {update.stdout}")
+    print(f"\nOutput is: {update.stdout}")
 
 def install_docker():
     print("Installing docker")
@@ -46,11 +46,13 @@ def install_docker():
     command = ['add-apt-repository', 'deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable']
     add_repository = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     update_policy = subprocess.run(['apt-cache', 'policy', 'docker-ce'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    install = subprocess.run(['apt', 'install', 'docker-ce'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print(f"Install docker status is: {install.stdout}")
+    install = subprocess.run(['apt', 'install', 'docker-ce', '-y'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(f"\nInstall docker status is: {install.stdout}")
     start_service = subprocess.run(['systemctl', 'start', 'docker'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    #check_status = subprocess.run(['systemctl', 'status', 'docker'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print(f"Docker service status is: {start_service.stdout}")
+    check_status = subprocess.run(['systemctl', 'status', 'docker'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(f"\nDocker service status is: {check_status.stdout}")
+    docker_version = subprocess.run(['docker', '-v'],  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(f"\nDocker version is: {docker_version.stdout}")
 
 
 if __name__ == "__main__":
