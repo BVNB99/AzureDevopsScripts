@@ -51,6 +51,7 @@ def install_docker():
     start_service = subprocess.run(['systemctl', 'start', 'docker'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     check_status = subprocess.run(['systemctl', 'status', 'docker'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     print(f"\nDocker service status is: {check_status.stdout}")
+    update_permission = subprocess.run(['chmod', '666', '/var/run/docker.sock'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     docker_version = subprocess.run(['docker', '-v'],  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     print(f"\nDocker version is: {docker_version.stdout}")
 
