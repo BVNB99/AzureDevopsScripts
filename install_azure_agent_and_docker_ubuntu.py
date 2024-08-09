@@ -57,7 +57,7 @@ def install_docker():
    
 def install_docker_compose():
     print(f"\nDocker version is: {docker_version.stdout}")
-    install_docker_compose = subprocess.Popen(('curl', '-L', 'https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)'), stdut=subprocess.PIPE)
+    install_docker_compose = subprocess.Popen(('curl', '-L', 'https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)'), stdout=subprocess.PIPE)
     create_docker_compose = subprocess.Popen(('-o', '/usr/local/bin/docker-compose'), stdin=install_docker_compose.stdout)
     update_permission = subprocess.run(['chmod', '755', '/usr/local/bin/docker-compose'])
     docker_compose_version = subprocess.run(['docker-compose', '--version'],  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
