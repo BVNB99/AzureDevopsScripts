@@ -68,7 +68,7 @@ if __name__ == "__main__":
     apt_update()
     install_packages()
     install_docker()
-    install_docker_compose()
+    #install_docker_compose()
     create_agent_directory()
     download_archive_file()
     install_archive_file()
