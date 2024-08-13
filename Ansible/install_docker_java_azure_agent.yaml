@@ -1,0 +1,108 @@
+---
+- hosts: ansible_nodes
+  become: yes
+  become_method: sudo
+  remote_user: test_user
+  gather_facts: no
+  vars_files:
+    - variables.yaml
+
+  tasks:
+    - name: Update packages
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+
+    - name: Install system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    - name: Add docker GPG apt key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add docker repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu jammy stable
+        state: present
+
+    - name: Install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Install docker compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: "0755"
+
+    - name: Check docker compose version
+      shell:
+        cmd: docker-compose --version
+      register: docker_compose_version
+
+    - debug:
+        msg: "Docker compose version is: {{ docker_compose_version.stdout }}"
+
+    - name: Update docker file permissions
+      file:
+        path: "/var/run/docker.sock"
+        mode: "0666"
+
+    - name: Install open jdk 17
+      apt:
+        name: openjdk-17-jdk
+        state: latest
+        update_cache: true
+
+    - name: Install open jre 17
+      apt:
+        name: openjdk-17-jre
+        state: latest
+        update_cache: true
+
+    - name: Install maven
+      apt:
+        name: maven
+        state: latest
+        update_cache: true
+
+    - name: Set JAVA_HOME_17_X64 environment variable
+      lineinfile:
+        dest: /etc/environment
+        regexp: '^JAVA_H0ME_17_X64'
+        line: 'JAVA_HOME_17_X64="/usr/lib/jvm/java-17-openjdk-amd64"'
+
+    - name: Execute source .bashrc to set the java home path
+      shell:
+        cmd: source /home/{{ remote_user_name }}/.bashrc
+      args:
+        executable: /bin/bash
+
+
+    - name: Create /opt/myagent directory
+      file:
+        path: "/home/{{ remote_user_name }}/myagent"
+        owner: "{{ remote_user_name }}"
+        group: "{{ remote_user_name }}"
+        state: directory
+        mode: "0755"
+
+    - name: Download and extract azure devops agent file
+      unarchive:
+        src: "{{ azure_devops_agent_file }}"
+        dest: "/home/{{ remote_user_name }}/myagent"
+        remote_src: yes
