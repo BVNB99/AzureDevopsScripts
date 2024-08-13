@@ -93,7 +93,7 @@
         executable: /bin/bash
 
 
-    - name: Create /opt/myagent directory
+    - name: Create myagent directory
       file:
         path: "/home/{{ remote_user_name }}/myagent"
         owner: "{{ remote_user_name }}"
