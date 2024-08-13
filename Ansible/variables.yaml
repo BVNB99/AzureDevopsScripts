@@ -1,0 +1,3 @@
+---
+remote_user_name: test_user
+azure_devops_agent_file: https://vstsagentpackage.azureedge.net/agent/3.242.1/vsts-agent-linux-x64-3.242.1.tar.gz
