@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "create_rg" {
-    name       =       "test-rg"
+    name       =       "storage-rg"
     location   =       "East US"
 }
 
