@@ -3,12 +3,12 @@ provider "azurerm" {
 }
 
 module "azure_aks" {
-  source 	= "./aks_module"
+  source 	= "../aks_module"
   tags 		= {
     environment	= "dev"
 	project		= "terraform-aks"
   }
-  resource_group_name	= "myResourceGroup"
+  resource_group_name	= "cluster-rg"
   location				= "East US"
   kubernetes_version	= "1.28.1"
   dns_prefix			= "myakscluster"
