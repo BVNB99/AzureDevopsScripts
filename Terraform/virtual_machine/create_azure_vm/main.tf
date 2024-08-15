@@ -1,6 +1,6 @@
 terraform {
   backend "azurerm" {
-    resource_group_name     = "test-rg"
+    resource_group_name     = "storage-rg"
     storage_account_name    = "tfbackendstorage1"
     container_name          = "terraform-state-test"
     key                     = "terraform.tfstate"
@@ -13,7 +13,7 @@ features {}
 
 module "azure_vm" {
   source                = "../azure_vm_module"
-  resource_group_name   = "test-rg-1"
+  resource_group_name   = "test-rg"
   location              = "East US"
   vnet_name             = "testVnet1"
   vnet_address_space    = "10.0.0.0/16"
