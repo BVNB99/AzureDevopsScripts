@@ -80,6 +80,12 @@
         state: latest
         update_cache: true
 
+    - name: Install JQ
+      apt:
+        name: jq
+        state: latest
+        update_cache: true
+        
     - name: Set JAVA_HOME_17_X64 environment variable
       lineinfile:
         dest: /etc/environment
